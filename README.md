@@ -1,6 +1,5 @@
-# p5js-template
-This is a template for creating new p5 projects. This template is based on
-the p5 + VS Code setup as
+# Asteroid Generator
+Built from a template that is based on the p5 + VS Code setup as
 [published by Stef Tervelde and Raphaël de Courville](https://sableraph.notion.site/The-perfect-p5-js-VSCode-setup-for-everyday-creative-coding-414c7eb4fb524da28d53763777d427b8),
 which assumes that p5 will be installed using [Node.js](https://nodejs.org/en).
 
@@ -23,12 +22,4 @@ npm install @types/p5
 
 ## Change Log
 ### 2025-10-04
-- Fix references to newly located JS files
-### 2024-02-29
-- Add p5
-- Add ts-check to the top of [sketch.js](sketch.js)
-### 2024-01-30
-- Ignore Node packages
-- Add jsconfig for global p5 completion
-- Remove JS directory
-- Remove p5 files
+- Plot points around an ellipsoid
