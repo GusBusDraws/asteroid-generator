@@ -3,14 +3,17 @@
 
 // @ts-ignore
 let points = [];
+// @ts-ignore
+let subpoints = [];
 
 function setup() {
   createCanvas(windowWidth, windowHeight, WEBGL)
   resetSketch()
   console.log('Press SPACE to stop looping or r to reset.')
   // Calculate and draw points
-  points = calcEllipsoid(200, 200, 200, 10)
-  // saveGif('00-point-sphere.gif', 5, {});
+  points = calcEllipsoid(200, 200, 200, 10);
+  subpoints = getRandomSubarray(points, 12);
+  // saveGif('00-gen-sphere.gif', 5, {});
 }
 
 function draw() {
@@ -21,13 +24,19 @@ function draw() {
   rotateX(frameCount * 0.01);
   rotateY(frameCount * 0.01);
   rotateZ(frameCount * 0.01);
-  stroke('#00ff00');
-  drawPoints(points);
+  // @ts-ignore
+  drawPoints(points, '#00ff00', 5);
+  // @ts-ignore
+  drawPoints(subpoints, '#ffffff', 10);
+  // @ts-ignore
+  draw3DShape(subpoints);
 }
 
 // @ts-ignore
-function drawPoints(points) {
+function drawPoints(points, color, size) {
   for (let pt of points) {
+    stroke(color);
+    strokeWeight(size);
     point(pt[0], pt[1], pt[2]);
   }
 }
@@ -53,13 +62,29 @@ function calcEllipsoid(rx, ry, rz, resolution) {
 }
 
 // @ts-ignore
+function draw3DShape(points) {
+  noStroke();
+  // Start drawing the shape
+  beginShape(TRIANGLES);
+  // Add vertices.
+  for (let pt of points) {
+    vertex(pt[0], pt[1], pt[2]);
+  }
+  // Stop drawing the shape.
+  endShape();
+}
+
+// @ts-ignore
 function getRandomSubarray(array, n) {
+  // @ts-ignore
   let subarray = [];
-  while (getRandomSubarray.length < n) {
+  while (subarray.length < n) {
     let item = random(array);
+    // @ts-ignore
     if (!subarray.includes(item)) {
       subarray.push(item)
     }
+    console.log(subarray.length)
   }
   return subarray
 }
