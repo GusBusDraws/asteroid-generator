@@ -1,10 +1,16 @@
 // @ts-check
 /// <reference path="./node_modules/@types/p5/global.d.ts" />
 
+// @ts-ignore
+let points = [];
+
 function setup() {
   createCanvas(windowWidth, windowHeight, WEBGL)
   resetSketch()
   console.log('Press SPACE to stop looping or r to reset.')
+  // Calculate and draw points
+  points = calcEllipsoid(200, 200, 200, 10)
+  // saveGif('00-point-sphere.gif', 5, {});
 }
 
 function draw() {
@@ -15,8 +21,6 @@ function draw() {
   rotateX(frameCount * 0.01);
   rotateY(frameCount * 0.01);
   rotateZ(frameCount * 0.01);
-  // Calculate and draw points
-  let points = calcEllipsoid(100, 100, 100, 10)
   stroke('#00ff00');
   drawPoints(points);
 }
@@ -48,6 +52,19 @@ function calcEllipsoid(rx, ry, rz, resolution) {
   return points
 }
 
+// @ts-ignore
+function getRandomSubarray(array, n) {
+  let subarray = [];
+  while (getRandomSubarray.length < n) {
+    let item = random(array);
+    if (!subarray.includes(item)) {
+      subarray.push(item)
+    }
+  }
+  return subarray
+}
+
 function resetSketch() {
   background(0)
+  points = [];
 }
