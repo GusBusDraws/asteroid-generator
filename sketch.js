@@ -26,10 +26,22 @@ function draw() {
   rotateY(rotateCounter * rotationInc);
   rotateZ(rotateCounter * rotationInc);
   // @ts-ignore
-  attempt03Quadrant();
+  attempt00Sphere();
+  // attempt01Subarray();
+  // attempt03Quadrant();
   if (isRotating) {
     rotateCounter++
   }
+}
+
+function attempt00Sphere() {
+  if (frameCount == 1) {
+    // Calculate and draw points
+    points = calcEllipsoid(300, 300, 100, 10);
+    subpoints = getRandomSubarray(points, 12);
+  }
+  // @ts-ignore
+  drawPoints(points, '#00ff00', 5);
 }
 
 function attempt01Subarray() {
