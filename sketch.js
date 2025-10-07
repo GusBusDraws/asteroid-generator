@@ -5,6 +5,10 @@
 let points = [];
 // @ts-ignore
 let subpoints = [];
+// @ts-ignore
+let rotationInc = 0.01;
+let isRotating = true;
+let rotateCounter = 0;
 
 function setup() {
   createCanvas(windowWidth, windowHeight, WEBGL)
@@ -18,11 +22,14 @@ function draw() {
   // Allows interactive camera control with mouse
   orbitControl();
   // Spin the coordinate system
-  rotateX(frameCount * 0.01);
-  rotateY(frameCount * 0.01);
-  rotateZ(frameCount * 0.01);
+  rotateX(rotateCounter * rotationInc);
+  rotateY(rotateCounter * rotationInc);
+  rotateZ(rotateCounter * rotationInc);
   // @ts-ignore
   attempt03Quadrant();
+  if (isRotating) {
+    rotateCounter++
+  }
 }
 
 function attempt01Subarray() {

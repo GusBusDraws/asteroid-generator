@@ -22,6 +22,7 @@ npm install @types/p5
 
 ## Change Log
 ### grow-mesh
+- 2025-10-06: Add rotation enable/disable
 - 2025-10-06: Add `getPointPerQuadrant`
 - 2025-10-06: Add `drawEdges`
 ### pick-points

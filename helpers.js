@@ -1,12 +1,12 @@
 function keyPressed() {
     // Set spacebar to toggle play/pause of drawing loop
     if (key === ' ') {
-      if (isLooping()) {
-        noLoop();
-        console.log('STOPPED. Press SPACE to resume.')
+      if (isRotating) {
+        isRotating = false;
+        console.log('Rotation disabled. Press SPACE to enable.')
       } else {
-        loop();
-        console.log('RESUMED. Press SPACE to stop.')
+        isRotating = true;
+        console.log('Rotation enabled. Press SPACE to disable.')
       }
     }
     if (key === 'r') {
