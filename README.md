@@ -21,8 +21,10 @@ npm install @types/p5
 ```
 
 ## Change Log
-### 2025-10-06
-- Make triangles with random subarray
-- Add `getRandomSubarray`
-### 2025-10-04
-- Plot points around an ellipsoid
+### grow-mesh
+- 2025-10-06: Add `drawEdges`
+### pick-points
+- 2025-10-06: Make triangles with random subarray
+- 2025-10-06: Add `getRandomSubarray`
+### plot-ellipsoid
+- 2025-10-04: Plot points around an ellipsoid
