@@ -26,58 +26,12 @@ function draw() {
   rotateY(rotateCounter * rotationInc);
   rotateZ(rotateCounter * rotationInc);
   // @ts-ignore
-  attempt00Sphere();
-  // attempt01Subarray();
-  // attempt03Quadrant();
+  workflow00Sphere();
+  // workflow01Subarray();
+  // workflow03Quadrant();
   if (isRotating) {
     rotateCounter++
   }
-}
-
-function attempt00Sphere() {
-  if (frameCount == 1) {
-    // Calculate and draw points
-    points = calcEllipsoid(300, 300, 100, 10);
-    subpoints = getRandomSubarray(points, 12);
-  }
-  // @ts-ignore
-  drawPoints(points, '#00ff00', 5);
-}
-
-function attempt01Subarray() {
-  if (frameCount == 1) {
-    // Calculate and draw points
-    points = calcEllipsoid(200, 200, 200, 10);
-    subpoints = getRandomSubarray(points, 12);
-  }
-  // @ts-ignore
-  drawPoints(points, '#00ff00', 5);
-  // @ts-ignore
-  drawPoints(subpoints, '#ffffff', 10);
-  // @ts-ignore
-  draw3DShape(subpoints);
-}
-
-function attempt02RandXYZ() {
-  if (frameCount == 1) {
-    // Calculate points
-    points = generatePoints(4, 50);
-  }
-  // @ts-ignore
-  drawPoints(points, '#00ff00', 5);
-  // @ts-ignore
-  drawEdges(points, '#ffffff', 1);
-}
-
-function attempt03Quadrant() {
-  if (frameCount == 1) {
-    // Calculate points
-    points = getPointPerQuadrant(25, 50);
-  }
-  // @ts-ignore
-  drawPoints(points, '#00ff00', 5);
-  // @ts-ignore
-  drawEdges(points, '#ffffff', 1);
 }
 
 // @ts-ignore
@@ -179,4 +133,50 @@ function getRandomSubarray(array, n) {
 function resetSketch() {
   background(0)
   points = [];
+}
+
+function workflow00Sphere() {
+  if (frameCount == 1) {
+    // Calculate and draw points
+    points = calcEllipsoid(50, 50, 50, 5);
+    subpoints = getRandomSubarray(points, 12);
+  }
+  // @ts-ignore
+  drawPoints(points, '#00ff00', 5);
+}
+
+function workflow01Subarray() {
+  if (frameCount == 1) {
+    // Calculate and draw points
+    points = calcEllipsoid(200, 200, 200, 5);
+    subpoints = getRandomSubarray(points, 12);
+  }
+  // @ts-ignore
+  drawPoints(points, '#00ff00', 5);
+  // @ts-ignore
+  drawPoints(subpoints, '#ffffff', 10);
+  // @ts-ignore
+  draw3DShape(subpoints);
+}
+
+function workflow02RandXYZ() {
+  if (frameCount == 1) {
+    // Calculate points
+    points = generatePoints(4, 50);
+  }
+  // @ts-ignore
+  drawPoints(points, '#00ff00', 5);
+  // @ts-ignore
+  drawEdges(points, '#ffffff', 1);
+}
+
+function workflow03Quadrant() {
+  if (frameCount == 1) {
+    // Calculate points
+    points = getPointPerQuadrant(25, 50);
+  }
+  // @ts-ignore
+  drawPoints(points, '#00ff00', 5);
+  // @ts-ignore
+  drawEdges(points, '#ffffff', 1);
 }
