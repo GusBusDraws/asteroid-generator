@@ -6,6 +6,8 @@ let points = [];
 // @ts-ignore
 let subpoints = [];
 // @ts-ignore
+let edges = [];
+// @ts-ignore
 let rotationInc = 0.01;
 let isRotating = true;
 let rotateCounter = 0;
@@ -26,16 +28,29 @@ function draw() {
   rotateY(rotateCounter * rotationInc);
   rotateZ(rotateCounter * rotationInc);
   // @ts-ignore
-  workflow00Sphere();
+  // workflow00Sphere();
   // workflow01Subarray();
+  // workflow02RandXYZ();
   // workflow03Quadrant();
+  workflow04WiggleLines();
   if (isRotating) {
     rotateCounter++
   }
 }
 
 // @ts-ignore
-function drawEdges(points, color, width) {
+function drawEdges(points, edges, color, width) {
+  stroke(color);
+  strokeWeight(width);
+  for (let edge of edges) {
+    let pt0 = points[edge[0]];
+    let pt1 = points[edge[1]];
+    line(pt0[0], pt0[1], pt0[2], pt1[0], pt1[1], pt1[2])
+  }
+}
+
+// @ts-ignore
+function drawEdgesFromOrigin(points, color, width) {
   stroke(color);
   strokeWeight(width);
   for (let pt of points) {
@@ -67,6 +82,17 @@ function calcEllipsoid(rx, ry, rz, resolution) {
       let z = rz * cos(phi);
       // Add the point to the shape
       points.push([x, y, z]);
+    }
+  }
+  return points
+}
+
+// @ts-ignore
+function creepPoints(points, maxCreep) {
+  for (let i = 0; i < points.length; i++) {
+    let pt = points[i];
+    for (let j = 0; j < 3; j++) {
+      pt[j] += random(-maxCreep, maxCreep);
     }
   }
   return points
@@ -130,6 +156,21 @@ function getRandomSubarray(array, n) {
   return subarray
 }
 
+// @ts-ignore
+function randomWalk(n, maxDist) {
+  let points = [[0, 0, 0]];
+  let edges = [];
+  for (let i = 1; i < n; i++) {
+    let pt0 = points[i-1];
+    let x = pt0[0] + random(-maxDist, maxDist);
+    let y = pt0[1] + random(-maxDist, maxDist);
+    let z = pt0[2] + random(-maxDist, maxDist);
+    points.push([x, y, z]);
+    edges.push([i-1, i]);
+  }
+  return [points, edges]
+}
+
 function resetSketch() {
   background(0)
   points = [];
@@ -147,7 +188,7 @@ function workflow00Sphere() {
 
 function workflow01Subarray() {
   if (frameCount == 1) {
-    // Calculate and draw points
+    // Calculate points
     points = calcEllipsoid(200, 200, 200, 5);
     subpoints = getRandomSubarray(points, 12);
   }
@@ -161,22 +202,32 @@ function workflow01Subarray() {
 
 function workflow02RandXYZ() {
   if (frameCount == 1) {
-    // Calculate points
     points = generatePoints(4, 50);
   }
   // @ts-ignore
   drawPoints(points, '#00ff00', 5);
   // @ts-ignore
-  drawEdges(points, '#ffffff', 1);
+  drawEdgesFromOrigin(points, '#ffffff', 1);
 }
 
 function workflow03Quadrant() {
   if (frameCount == 1) {
-    // Calculate points
-    points = getPointPerQuadrant(25, 50);
+    points = getPointPerQuadrant(50, 100);
   }
   // @ts-ignore
   drawPoints(points, '#00ff00', 5);
   // @ts-ignore
-  drawEdges(points, '#ffffff', 1);
+  drawEdgesFromOrigin(points, '#ffffff', 1);
+}
+
+function workflow04WiggleLines() {
+  if (frameCount == 1) {
+    [points, edges] = randomWalk(10, 50);
+  }
+  // @ts-ignore
+  points = creepPoints(points, 1);
+  // @ts-ignore
+  drawPoints(points, '#00ff00', 5);
+  // @ts-ignore
+  drawEdges(points, edges, '#ffffff', 1);
 }
