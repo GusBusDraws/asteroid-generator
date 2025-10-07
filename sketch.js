@@ -11,7 +11,6 @@ function setup() {
   resetSketch()
   console.log('Press SPACE to stop looping or r to reset.')
   // saveGif('00-gen-sphere.gif', 5, {});
-  points = generatePoints(4, 50);
 }
 
 function draw() {
@@ -23,12 +22,10 @@ function draw() {
   rotateY(frameCount * 0.01);
   rotateZ(frameCount * 0.01);
   // @ts-ignore
-  drawPoints(points, '#00ff00', 5);
-  // @ts-ignore
-  drawEdges(points, '#ffffff', 2);
+  attempt03Quadrant();
 }
 
-function attemptSubarray() {
+function attempt01Subarray() {
   if (frameCount == 1) {
     // Calculate and draw points
     points = calcEllipsoid(200, 200, 200, 10);
@@ -40,6 +37,28 @@ function attemptSubarray() {
   drawPoints(subpoints, '#ffffff', 10);
   // @ts-ignore
   draw3DShape(subpoints);
+}
+
+function attempt02RandXYZ() {
+  if (frameCount == 1) {
+    // Calculate points
+    points = generatePoints(4, 50);
+  }
+  // @ts-ignore
+  drawPoints(points, '#00ff00', 5);
+  // @ts-ignore
+  drawEdges(points, '#ffffff', 1);
+}
+
+function attempt03Quadrant() {
+  if (frameCount == 1) {
+    // Calculate points
+    points = getPointPerQuadrant(25, 50);
+  }
+  // @ts-ignore
+  drawPoints(points, '#00ff00', 5);
+  // @ts-ignore
+  drawEdges(points, '#ffffff', 1);
 }
 
 // @ts-ignore
@@ -101,6 +120,24 @@ function generatePoints(n, range) {
     let y = random(-1*range, range);
     let z = random(-1*range, range);
     points.push([x, y, z]);
+  }
+  return points
+}
+
+// @ts-ignore
+function getPointPerQuadrant(minRadius, maxRadius) {
+  let points = [];
+  for (let i = 0; i < 2; i++) {
+    for (let j = 0; j < 4; j++) {
+      let r = random(minRadius, maxRadius);
+      let phi = random(i*PI, (i+1)*PI);
+      let theta = random(j*TWO_PI, (j+1)*TWO_PI);
+      // Convert spherical coordinates to Cartesian coordinates
+      let x = r * sin(phi) * cos(theta);
+      let y = r * sin(phi) * sin(theta);
+      let z = r * cos(phi);
+      points.push([x, y, z]);
+    }
   }
   return points
 }
