@@ -34,6 +34,7 @@ function draw() {
   // workflow03Quadrant();
   // workflow04WiggleLines();
   workflow05Steering();
+  // workflow06();
   if (isRotating) {
     rotateCounter++
   }
@@ -260,7 +261,20 @@ function workflow04WiggleLines() {
 
 function workflow05Steering() {
   if (frameCount == 1) {
-    [points, edges] = randomSteer(10, 25, 50, PI/2);
+    [points, edges] = randomSteer(10, 25, 50, PI);
+  }
+  // @ts-ignore
+  drawPoints(points, '#00ff00', 5);
+  // @ts-ignore
+  drawEdges(points, edges, '#ffffff', 1);
+}
+
+function workflow06() {
+  if (frameCount == 1) {
+    [points, edges] = randomSteer(3, 50, 100, PI/2);
+    // draw ring with 3 points
+    // draw ring with 6 points
+    // draw ring with 3 points
   }
   // @ts-ignore
   drawPoints(points, '#00ff00', 5);
