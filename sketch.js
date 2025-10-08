@@ -8,6 +8,8 @@ let subpoints = [];
 // @ts-ignore
 let edges = [];
 // @ts-ignore
+let rings = {};
+// @ts-ignore
 let rotationInc = 0.01;
 let isRotating = true;
 let rotateCounter = 0;
@@ -33,8 +35,8 @@ function draw() {
   // workflow02RandXYZ();
   // workflow03Quadrant();
   // workflow04WiggleLines();
-  workflow05Steering();
-  // workflow06();
+  // workflow05Steering();
+  workflow06();
   if (isRotating) {
     rotateCounter++
   }
@@ -85,6 +87,26 @@ function calcEllipsoid(rx, ry, rz, resolution) {
       // Add the point to the shape
       points.push([x, y, z]);
     }
+  }
+  return points
+}
+
+// @ts-ignore
+function createRing(center, nPts, rMin, rMax, phiRange) {
+  // @ts-ignore
+  let points = [];
+  for (let i = 0; i < nPts; i++) {
+    let r = random(rMin, rMax);
+    // let phi = random(-phiRange/2, phiRange/2);
+    // let theta = random(i*TWO_PI / (2*nPts), (i+1)*TWO_PI / (2*nPts));
+    // let r = 50;
+    let phi = PI/2;
+    let theta = (2*i)*(TWO_PI / (2*nPts));
+    // Convert spherical coordinates to Cartesian coordinates
+    let x = r * sin(phi) * cos(theta) + center[0];
+    let y = r * sin(phi) * sin(theta) + center[1];
+    let z = r * cos(phi) + center[2];
+    points.push([x, y, z])
   }
   return points
 }
@@ -271,13 +293,25 @@ function workflow05Steering() {
 
 function workflow06() {
   if (frameCount == 1) {
-    [points, edges] = randomSteer(3, 50, 100, PI/2);
-    // draw ring with 3 points
-    // draw ring with 6 points
-    // draw ring with 3 points
+    [points, edges] = randomSteer(3, 50, 200, PI/2);
+    // Draw ring with 3 points
+    // @ts-ignore
+    rings[0] = createRing(points[0], 3, 50, 75, PI);
+    // Draw ring with 6 points
+    // @ts-ignore
+    rings[1] = createRing(points[1], 6, 75, 100, PI);
+    // Draw ring with 3 points
+    // @ts-ignore
+    rings[2] = createRing(points[2], 3, 50, 75, PI);
   }
   // @ts-ignore
-  drawPoints(points, '#00ff00', 5);
+  drawPoints(points, '#ffffff', 5);
   // @ts-ignore
   drawEdges(points, edges, '#ffffff', 1);
+  // @ts-ignore
+  drawPoints(rings[0], '#ff0000', 5);
+  // @ts-ignore
+  drawPoints(rings[1], '#00ff00', 5);
+  // @ts-ignore
+  drawPoints(rings[2], '#0000ff', 5);
 }
