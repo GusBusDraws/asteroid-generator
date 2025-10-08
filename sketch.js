@@ -32,7 +32,8 @@ function draw() {
   // workflow01Subarray();
   // workflow02RandXYZ();
   // workflow03Quadrant();
-  workflow04WiggleLines();
+  // workflow04WiggleLines();
+  workflow05Steering();
   if (isRotating) {
     rotateCounter++
   }
@@ -171,6 +172,31 @@ function randomWalk(n, maxDist) {
   return [points, edges]
 }
 
+// @ts-ignore
+function randomSteer(n, minDist, maxDist, maxAngle) {
+  let points = [[0, 0, 0]];
+  let edges = [];
+  let theta = random(0, TWO_PI);
+  let phi = random(0, PI);
+  let r = random(minDist, maxDist);
+  let x = r * sin(phi) * cos(theta);
+  let y = r * sin(phi) * sin(theta);
+  let z = r * cos(phi);
+  points.push([x, y, z]);
+  edges.push([0, 1]);
+  for (let i = 2; i < n; i++) {
+    theta = theta + random(-maxAngle/2, maxAngle/2)
+    phi = phi + random(-maxAngle/2, maxAngle/2)
+    r = random(minDist, maxDist);
+    x = x + r * sin(phi) * cos(theta);
+    y = y + r * sin(phi) * sin(theta);
+    z = z + r * cos(phi);
+    points.push([x, y, z]);
+    edges.push([i-1, i]);
+  }
+  return [points, edges]
+}
+
 function resetSketch() {
   background(0)
   points = [];
@@ -226,6 +252,16 @@ function workflow04WiggleLines() {
   }
   // @ts-ignore
   points = creepPoints(points, 1);
+  // @ts-ignore
+  drawPoints(points, '#00ff00', 5);
+  // @ts-ignore
+  drawEdges(points, edges, '#ffffff', 1);
+}
+
+function workflow05Steering() {
+  if (frameCount == 1) {
+    [points, edges] = randomSteer(10, 25, 50, PI/2);
+  }
   // @ts-ignore
   drawPoints(points, '#00ff00', 5);
   // @ts-ignore

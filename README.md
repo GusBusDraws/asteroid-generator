@@ -22,6 +22,7 @@ npm install @types/p5
 
 ## Change Log
 ### grow-mesh
+- 2025-10-07: Add `randomSteer`
 - 2025-10-07: Add `randomWalk` and `creepPoints`
 - 2025-10-07: Rename 'attempt' functions to 'workflow'
 - 2025-10-06: Add rotation enable/disable
