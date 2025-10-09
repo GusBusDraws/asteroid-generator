@@ -5,6 +5,7 @@ let points = [];
 let subpoints = [];
 let edges = [];
 let rings = {};
+let tris = [];
 let rotationInc = 0.01;
 let isRotating = true;
 let rotateCounter = 0;
@@ -18,6 +19,7 @@ function setup() {
 
 function draw() {
   background(50);
+  lights();
   // Allows interactive camera control with mouse
   orbitControl();
   // Spin the coordinate system
@@ -95,14 +97,79 @@ function createRing(center, nPts, rMin, rMax, phiRange) {
     let x = r * sin(phi) * cos(theta) + center[0];
     let y = r * sin(phi) * sin(theta) + center[1];
     let z = r * cos(phi) + center[2];
+     points.push([x, y, z])
+  }
+  return points
+}
+
+function createRotatedRing(options = {}) {
+  const {
+    center = [0, 0, 0],
+    rotation = null,
+    nPts = 3,
+    rMin = 50,
+    rMax = 50,
+    phiRange = PI/2
+  } = options;
+  console.log(`center: ${center}, rotation: ${rotation}, nPts: ${nPts}, rMin: ${rMin}, rMax: ${rMax}, phiRange: ${phiRange}`);
+  let points = [];
+  for (let i = 0; i < nPts; i++) {
+    let r = random(rMin, rMax);
+    let phi = PI/2;
+    let theta = (2*i)*(TWO_PI / (2*nPts));
+    // Convert spherical coordinates to Cartesian coordinates
+    let x = r * sin(phi) * cos(theta) + center[0];
+    let y = r * sin(phi) * sin(theta) + center[1];
+    let z = r * cos(phi) + center[2];
+    if (rotation != null) {
+      let pivot = createVector(center[0], center[1], center[2]);
+      let originalPt = createVector(x, y, z);
+      let rotatedPt = originalPt.copy();
+      // WIP because these functions don't exist
+      rotatedPt.rotateX(rotation[0]);
+      rotatedPt.rotateY(rotation[1]);
+      rotatedPt.rotateZ(rotation[2]);
+      // The final coordinates are the rotated vector relative to the pivot
+      let finalPt = p5.Vector.add(pivot, rotatedPt);
+      [x, y, z] = finalPt.array
+    }
     points.push([x, y, z])
   }
   return points
 }
 
-function configure(options = {}) {
-  const { theme = "light", fontSize = 16, debug = false } = options;
-  console.log(`Theme: ${theme}, Font Size: ${fontSize}, Debug Mode: ${debug}`);
+function createTrisManual(rings) {
+  // Each triangle is a collection of two indices: The first corresponds to the ring, and the second corresponds to the index of the point in the ring
+  tris = [
+    // First face
+    [[0, 0], [0, 1], [0, 2]],
+    // 3 off ring 0
+    [[0, 0], [0, 1], [1, 0]],
+    [[0, 1], [0, 2], [1, 2]],
+    [[0, 2], [0, 0], [1, 4]],
+    // 6 between rings 0 & 1
+    [[1, 1], [1, 0], [0, 1]],
+    [[1, 1], [1, 2], [0, 1]],
+    [[1, 3], [1, 2], [0, 2]],
+    [[1, 3], [1, 4], [0, 2]],
+    [[1, 5], [1, 4], [0, 0]],
+    [[1, 5], [1, 0], [0, 0]],
+    // 6 between rings 1 & 2
+    [[1, 0], [1, 1], [2, 0]],
+    [[1, 1], [1, 2], [2, 1]],
+    [[1, 2], [1, 3], [2, 1]],
+    [[1, 3], [1, 4], [2, 2]],
+    [[1, 4], [1, 5], [2, 2]],
+    [[1, 5], [1, 0], [2, 0]],
+    // 3 between 2 & final face
+    [[1, 1], [2, 0], [2, 1]],
+    [[1, 3], [2, 1], [2, 2]],
+    [[1, 5], [2, 2], [2, 0]],
+    // Face of ring 2
+    [[2, 0], [2, 1], [2, 2]]
+  ];
+  console.log(tris);
+  return tris
 }
 
 function creepPoints(points, maxCreep) {
@@ -127,6 +194,24 @@ function draw3DShape(points) {
   endShape();
 }
 
+function drawTris(tris, rings) {
+  fill(255);
+  stroke(255);
+  beginShape(TRIANGLES);
+  for (let tri of tris) {
+    for (let v = 0; v < 3; v++) {
+      ringIdx = tri[v][0];
+      ptIdx = tri[v][1];
+      vertex(
+        rings[ringIdx][ptIdx][0],
+        rings[ringIdx][ptIdx][1],
+        rings[ringIdx][ptIdx][2],
+      );
+    }
+  }
+  endShape();
+}
+
 function generatePoints(n, range) {
   let points = [];
   for (let i = 0; i < n; i++) {
@@ -142,7 +227,7 @@ function getPointPerQuadrant(minRadius, maxRadius) {
   let points = [];
   for (let i = 0; i < 2; i++) {
     for (let j = 0; j < 4; j++) {
-      let r = random(minRadius, maxRadius);
+      let r =  random(minRadius, maxRadius);
       let phi = random(i*PI, (i+1)*PI);
       let theta = random(j*TWO_PI, (j+1)*TWO_PI);
       // Convert spherical coordinates to Cartesian coordinates
@@ -289,9 +374,11 @@ function workflow07() {
     rings[1] = createRing(points[1], 6, 75, 100, PI);
     // Draw ring with 3 points
     rings[2] = createRing(points[2], 3, 50, 75, PI);
+    tris = createTrisManual(rings);
   }
   drawPoints(points, '#ffffff', 5);
   drawEdges(points, edges, '#ffffff', 1);
+  drawTris(tris, rings);
   drawPoints(rings[0], '#ff0000', 5);
   drawPoints(rings[1], '#00ff00', 5);
   drawPoints(rings[2], '#0000ff', 5);
