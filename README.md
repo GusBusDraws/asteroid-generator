@@ -22,6 +22,7 @@ npm install @types/p5
 
 ## Change Log
 ### grow-mesh
+- 2025-10-08: Disable TS checks
 - 2025-10-08: Add `createRing`
 - 2025-10-07: Add `randomSteer`
 - 2025-10-07: Add `randomWalk` and `creepPoints`

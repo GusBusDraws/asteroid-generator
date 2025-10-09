@@ -1,15 +1,10 @@
-// @ts-check
+// @ts-nocheck
 /// <reference path="./node_modules/@types/p5/global.d.ts" />
 
-// @ts-ignore
 let points = [];
-// @ts-ignore
 let subpoints = [];
-// @ts-ignore
 let edges = [];
-// @ts-ignore
 let rings = {};
-// @ts-ignore
 let rotationInc = 0.01;
 let isRotating = true;
 let rotateCounter = 0;
@@ -29,20 +24,19 @@ function draw() {
   rotateX(rotateCounter * rotationInc);
   rotateY(rotateCounter * rotationInc);
   rotateZ(rotateCounter * rotationInc);
-  // @ts-ignore
   // workflow00Sphere();
   // workflow01Subarray();
   // workflow02RandXYZ();
   // workflow03Quadrant();
   // workflow04WiggleLines();
   // workflow05Steering();
-  workflow06();
+  // workflow06PointDisks();
+  workflow07();
   if (isRotating) {
     rotateCounter++
   }
 }
 
-// @ts-ignore
 function drawEdges(points, edges, color, width) {
   stroke(color);
   strokeWeight(width);
@@ -53,7 +47,6 @@ function drawEdges(points, edges, color, width) {
   }
 }
 
-// @ts-ignore
 function drawEdgesFromOrigin(points, color, width) {
   stroke(color);
   strokeWeight(width);
@@ -62,7 +55,6 @@ function drawEdgesFromOrigin(points, color, width) {
   }
 }
 
-// @ts-ignore
 function drawPoints(points, color, size) {
   for (let pt of points) {
     stroke(color);
@@ -71,7 +63,6 @@ function drawPoints(points, color, size) {
   }
 }
 
-// @ts-ignore
 function calcEllipsoid(rx, ry, rz, resolution) {
   let points = [];
   for (let i = 0; i < resolution; i++) {
@@ -91,9 +82,7 @@ function calcEllipsoid(rx, ry, rz, resolution) {
   return points
 }
 
-// @ts-ignore
 function createRing(center, nPts, rMin, rMax, phiRange) {
-  // @ts-ignore
   let points = [];
   for (let i = 0; i < nPts; i++) {
     let r = random(rMin, rMax);
@@ -111,7 +100,11 @@ function createRing(center, nPts, rMin, rMax, phiRange) {
   return points
 }
 
-// @ts-ignore
+function configure(options = {}) {
+  const { theme = "light", fontSize = 16, debug = false } = options;
+  console.log(`Theme: ${theme}, Font Size: ${fontSize}, Debug Mode: ${debug}`);
+}
+
 function creepPoints(points, maxCreep) {
   for (let i = 0; i < points.length; i++) {
     let pt = points[i];
@@ -122,7 +115,6 @@ function creepPoints(points, maxCreep) {
   return points
 }
 
-// @ts-ignore
 function draw3DShape(points) {
   noStroke();
   // Start drawing the shape
@@ -135,7 +127,6 @@ function draw3DShape(points) {
   endShape();
 }
 
-// @ts-ignore
 function generatePoints(n, range) {
   let points = [];
   for (let i = 0; i < n; i++) {
@@ -147,7 +138,6 @@ function generatePoints(n, range) {
   return points
 }
 
-// @ts-ignore
 function getPointPerQuadrant(minRadius, maxRadius) {
   let points = [];
   for (let i = 0; i < 2; i++) {
@@ -165,13 +155,10 @@ function getPointPerQuadrant(minRadius, maxRadius) {
   return points
 }
 
-// @ts-ignore
 function getRandomSubarray(array, n) {
-  // @ts-ignore
   let subarray = [];
   while (subarray.length < n) {
     let item = random(array);
-    // @ts-ignore
     if (!subarray.includes(item)) {
       subarray.push(item)
     }
@@ -180,7 +167,6 @@ function getRandomSubarray(array, n) {
   return subarray
 }
 
-// @ts-ignore
 function randomWalk(n, maxDist) {
   let points = [[0, 0, 0]];
   let edges = [];
@@ -195,7 +181,6 @@ function randomWalk(n, maxDist) {
   return [points, edges]
 }
 
-// @ts-ignore
 function randomSteer(n, minDist, maxDist, maxAngle) {
   let points = [[0, 0, 0]];
   let edges = [];
@@ -228,10 +213,9 @@ function resetSketch() {
 function workflow00Sphere() {
   if (frameCount == 1) {
     // Calculate and draw points
-    points = calcEllipsoid(50, 50, 50, 5);
+    points = calcEllipsoid(100, 100, 100, 10);
     subpoints = getRandomSubarray(points, 12);
   }
-  // @ts-ignore
   drawPoints(points, '#00ff00', 5);
 }
 
@@ -241,11 +225,8 @@ function workflow01Subarray() {
     points = calcEllipsoid(200, 200, 200, 5);
     subpoints = getRandomSubarray(points, 12);
   }
-  // @ts-ignore
   drawPoints(points, '#00ff00', 5);
-  // @ts-ignore
   drawPoints(subpoints, '#ffffff', 10);
-  // @ts-ignore
   draw3DShape(subpoints);
 }
 
@@ -253,9 +234,7 @@ function workflow02RandXYZ() {
   if (frameCount == 1) {
     points = generatePoints(4, 50);
   }
-  // @ts-ignore
   drawPoints(points, '#00ff00', 5);
-  // @ts-ignore
   drawEdgesFromOrigin(points, '#ffffff', 1);
 }
 
@@ -263,9 +242,7 @@ function workflow03Quadrant() {
   if (frameCount == 1) {
     points = getPointPerQuadrant(50, 100);
   }
-  // @ts-ignore
   drawPoints(points, '#00ff00', 5);
-  // @ts-ignore
   drawEdgesFromOrigin(points, '#ffffff', 1);
 }
 
@@ -273,11 +250,8 @@ function workflow04WiggleLines() {
   if (frameCount == 1) {
     [points, edges] = randomWalk(10, 50);
   }
-  // @ts-ignore
   points = creepPoints(points, 1);
-  // @ts-ignore
   drawPoints(points, '#00ff00', 5);
-  // @ts-ignore
   drawEdges(points, edges, '#ffffff', 1);
 }
 
@@ -285,33 +259,40 @@ function workflow05Steering() {
   if (frameCount == 1) {
     [points, edges] = randomSteer(10, 25, 50, PI);
   }
-  // @ts-ignore
   drawPoints(points, '#00ff00', 5);
-  // @ts-ignore
   drawEdges(points, edges, '#ffffff', 1);
 }
 
-function workflow06() {
+function workflow06PointDisks() {
   if (frameCount == 1) {
     [points, edges] = randomSteer(3, 50, 200, PI/2);
     // Draw ring with 3 points
-    // @ts-ignore
     rings[0] = createRing(points[0], 3, 50, 75, PI);
     // Draw ring with 6 points
-    // @ts-ignore
     rings[1] = createRing(points[1], 6, 75, 100, PI);
     // Draw ring with 3 points
-    // @ts-ignore
     rings[2] = createRing(points[2], 3, 50, 75, PI);
   }
-  // @ts-ignore
   drawPoints(points, '#ffffff', 5);
-  // @ts-ignore
   drawEdges(points, edges, '#ffffff', 1);
-  // @ts-ignore
   drawPoints(rings[0], '#ff0000', 5);
-  // @ts-ignore
   drawPoints(rings[1], '#00ff00', 5);
-  // @ts-ignore
+  drawPoints(rings[2], '#0000ff', 5);
+}
+
+function workflow07() {
+  if (frameCount == 1) {
+    [points, edges] = randomSteer(3, 50, 200, PI/2);
+    // Draw ring with 3 points
+    rings[0] = createRing(points[0], 3, 50, 75, PI);
+    // Draw ring with 6 points
+    rings[1] = createRing(points[1], 6, 75, 100, PI);
+    // Draw ring with 3 points
+    rings[2] = createRing(points[2], 3, 50, 75, PI);
+  }
+  drawPoints(points, '#ffffff', 5);
+  drawEdges(points, edges, '#ffffff', 1);
+  drawPoints(rings[0], '#ff0000', 5);
+  drawPoints(rings[1], '#00ff00', 5);
   drawPoints(rings[2], '#0000ff', 5);
 }
